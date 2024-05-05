@@ -1,0 +1,88 @@
+#include <iostream>
+#include <random>
+#include <vector>
+#include <string>
+#include <fstream>
+
+// 随机生成一个指定范围内的整数
+int generateRandomInt(int min, int max) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dis(min, max);
+    return dis(gen);
+}
+
+// 生成四则运算符
+std::string generateOperator() {
+    std::vector<char> ops = {'+', '-', '*', '/'};
+    return std::string(1, ops[generateRandomInt(0, 3)]);
+}
+
+// 生成表达式
+std::string generateExpression(int a, int b, char op, bool hasDecimal, bool useBrackets) {
+    std::string expression;
+    int decimalPart = hasDecimal ? generateRandomInt(1, 9) : 0;
+    if (useBrackets) {
+        expression += "(" + std::to_string(a) + ") " + generateOperator() + " (" + std::to_string(b) + ")";
+    } else {
+        expression += std::to_string(a) + " " + generateOperator() + " " + std::to_string(b);
+    }
+    if (hasDecimal) {
+        expression += " + " + std::to_string(decimalPart) + ".5";
+    }
+    return expression;
+}
+
+// 主程序
+int main() {
+    int problemCount;
+    char op;
+    int maxNumber;
+    bool hasDecimal;
+    bool useBrackets;
+    std::string outputType;
+
+    std::cout << "Enter the number of problems: ";
+    std::cin >> problemCount;
+
+    std::cout << "Choose an operator (+, -, *, /): ";
+    std::cin >> op;
+
+    std::cout << "Enter the maximum number: ";
+    std::cin >> maxNumber;
+
+    std::cout << "Do you want to include decimals? (yes/no): ";
+    std::string includeDecimal;
+    std::cin >> includeDecimal;
+    hasDecimal = includeDecimal == "yes";
+
+    std::cout << "Do you want to use brackets? (yes/no): ";
+    std::string useBracketsInput;
+    std::cin >> useBracketsInput;
+    useBrackets = useBracketsInput == "yes";
+
+    std::cout << "Choose output type (console/file): ";
+    std::cin >> outputType;
+
+    std::vector<std::string> problems;
+    for (int i = 0; i < problemCount; ++i) {
+        int a = generateRandomInt(1, maxNumber);
+        int b = generateRandomInt(1, maxNumber);
+        std::string problem = generateExpression(a, b, op, hasDecimal, useBrackets);
+        problems.push_back(problem);
+    }
+
+    if (outputType == "file") {
+        std::ofstream outFile("arithmetic_problems.txt");
+        for (const auto& problem : problems) {
+            outFile << problem << std::endl;
+        }
+        outFile.close();
+    } else {
+        for (const auto& problem : problems) {
+            std::cout << problem << std::endl;
+        }
+    }
+
+    return 0;
+}
