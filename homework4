@@ -1,0 +1,65 @@
+import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class ArithmeticGenerator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("欢迎使用小学四则运算自动生成程序！");
+
+        System.out.print("请输入题目数量：");
+        int numOfQuestions = scanner.nextInt();
+
+        System.out.print("请选择运算符（+、-、*、/）：");
+        char operator = scanner.next().charAt(0);
+
+        System.out.print("请设置最大数：");
+        int maxNumber = scanner.nextInt();
+
+        System.out.print("是否有括号？（y/n）：");
+        boolean hasParentheses = scanner.next().equalsIgnoreCase("y");
+
+        System.out.print("是否有小数？（y/n）：");
+        boolean hasDecimal = scanner.next().equalsIgnoreCase("y");
+
+        System.out.print("输出方式（1：输出到文件，2：打印到控制台）：");
+        int outputOption = scanner.nextInt();
+
+        generateArithmeticQuestions(numOfQuestions, operator, maxNumber, hasParentheses, hasDecimal, outputOption);
+    }
+
+    private static void generateArithmeticQuestions(int numOfQuestions, char operator, int maxNumber, boolean hasParentheses, boolean hasDecimal, int outputOption) {
+        // 在这里编写生成题目的逻辑，根据用户选择的选项进行相应的处理和输出
+        // 可以使用随机数生成器来生成题目中的数字和运算符
+        // 根据用户的选择，将题目输出到文件或打印到控制台
+
+        // 示例代码：生成题目并输出到控制台
+        for (int i = 0; i < numOfQuestions; i++) {
+            int num1 = (int) (Math.random() * maxNumber) + 1;
+            int num2 = (int) (Math.random() * maxNumber) + 1;
+            double result = 0;
+
+            switch (operator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    result = (double) num1 / num2;
+                    break;
+                default:
+                    System.out.println("无效的运算符！");
+                    return;
+            }
+
+            String question = String.format("%d %c %d = %.2f", num1, operator, num2, result);
+            System.out.println(question);
+        }
+    }
+}
